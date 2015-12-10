@@ -1049,33 +1049,33 @@ void loop() {
 
 ---
 
-## Json FIXME formatting
+## Json
 
 Standard di trasmissione dati
 
 ```json
 {
-    "firstName": "John",
-    "lastName": "Smith",
-    "isAlive": true,
-    "age": 25,
-    "phoneNumbers": [
-      {
-        "type": "home",
-        "number": "212 555-1234"
-      },
-      {
-        "type": "office",
-        "number": "646 555-4567"
-      }
-    ],
-    "children": []
+	"firstName": "John",
+	"lastName": "Smith",
+	"isAlive": true,
+	"age": 25,
+	"phoneNumbers": [
+	{
+	"type": "home",
+	"number": "212 555-1234"
+	},
+	{
+		"type": "office",
+		"number": "646 555-4567"
+	}
+	],
+	"children": []
 }
 ```
 
 --
 
-### Codice
+### Codice FIXME json da Arduino
 
 #### dump
 ```python
@@ -1095,14 +1095,74 @@ Standard di trasmissione dati
 
 ## API
 
+--
+
+### Application Programing Interface
+
+Un'interfaccia per programmatori
+
+--
+
+## b3api
+
+Interfaccia minimale per gestire lo stato della nostra sede
+
+https://github.com/Politecnico-Open-unix-Labs/b3api
+
+--
+
+### Funzionalità
+
+- Il server conserva i dati
+- Tutti possono leggere
+- I client autorizzati possono scrivere
+
+
 ---
 
 ## Inviare dati
+
+--
+
+### POST
+
+```c++
+http.POST("{\"temperatura\":\"24\", \"key\":<YOUR_TOKEN_HERE>}");
+```
 
 ---
 
 ## Ricevere dati
 
+--
+
+### GET
+
+```c++
+stringa_json = http.GET();
+```
+
+---
+
+### WebSocket
+
+--
+
+#### da usare da Python o altro linguaggio a scelta
+
+```python
+from websocket import create_connection
+
+ws = create_connection("ws://localhost:8080")
+
+# receiving
+print(ws.recv())
+
+# sending
+ws.send('{"hello":"world", "key":<YOUR_TOKEN_HERE>}')
+
+ws.close()
+```
 
 ---
 
