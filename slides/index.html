@@ -90,7 +90,7 @@
 
 ## Trovate queste slide all'indirizzo
 
-## [hackathon.corna.info](https://hackathon.corna.info)
+### [slides.poul.org/2015/hackathon-iot](http://slides.poul.org/2015/hackathon-iot/#/)
 
 ---
 
@@ -167,7 +167,7 @@ A: Certo! <!-- .element: class="fragment" -->
 
 #### Q: _"Posso portare un altro sensore o dispositivo?"_
 
-A: Forse, al termine di questa presentazione chiedetemelo. Generalmente non abbiamo nulla in contrario. <!-- .element: class="fragment" -->
+A: Forse, chiedimelo al termine di questa presentazione. Generalmente non abbiamo nulla in contrario. <!-- .element: class="fragment" -->
 
 --
 
@@ -371,8 +371,8 @@ L'ESP8266 si programma con la seriale.
 Per collegarlo basta connettere
  - TX ↔ RX
  - RX ↔ TX
- - GPIO0 (ESP8266) ↔ DTS (programmatore)
- - REST (ESP8266) ↔ RTS (programmatore)
+ - GPIO0 (ESP8266) ↔ DTS (convertitore)
+ - REST (ESP8266) ↔ RTS (convertitore)
 
 --
 
@@ -396,7 +396,7 @@ Se volete invece che all'avvio l'ESP lanci in automatico il programma, connettet
 
 #### L'ESP8266 e tutti i sensori funzionano a 3.3 V, mentre il convertitore USB-seriale funziona a 5 V.
 
-#### Fortunatamente nel modulo ESP-12 è integrato un convertitore 5 V → 3.3 V, quindi possiamo collegare direttamente il VCC del programmatore con il VCC dell'ESP.
+#### Fortunatamente nel modulo ESP-12 è integrato un convertitore 5 V → 3.3 V, quindi possiamo collegare direttamente il VCC del convertitore con il VCC dell'ESP.
 
 ### **Non collegate il VCC (5 V) del convertitore a nient'altro!!!**
 
@@ -447,15 +447,12 @@ IMMAGINE
 
 --
 
-#### Mentre questo è il pinout:
-
-IMMAGINE PINOUT
-
---
-
-#### Potete quindi collegare l'ESP8266 al convertitore USB-seriale in questo modo:
-
-IMMAGINE CONNESSIONI
+#### Potete collegare l'ESP8266 al convertitore USB-seriale in questo modo:
+ - 3V3 a 3.3V (**NON all'uscita del convertitore USB-seriale**)
+ - TX (ESP8266) ↔ 1A, 1B ↔ RX (convertitore)
+ - RX (ESP8266) ↔ 2A, 2B ↔ TX (convertitore)
+ - GPIO0 (ESP8266) ↔ 3A, 3B ↔ DTS (convertitore)
+ - REST (ESP8266) ↔ 4A, 4B ↔ RTS (convertitore)
 
 ---
 
@@ -467,7 +464,7 @@ Pressione atmosferica + campo magnetico
 --
 
 #### Entrambi questi sensori sono connessi tramite I<sup>2</sup>C, per cui basta connettere
- - 3V3 a 3.3 V (**NON all'uscita del convertitore USB-seriale**)
+ - 3V3 a 3.3 V
  - GND a GND
  - SDA all'SDA dell'ESP8266 (pin 4)
  - SCL all'SCL dell'ESP8266 (pin 5)
