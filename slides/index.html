@@ -59,8 +59,11 @@
 
 <!-- .slide: data-background="#fdfddf" -->
 
-FIXME IMAGE
-<img src="img/stampa3d.svg" alt="Banner" style="width: 70%; margin-top: -1em; border: 0; box-shadow: none;">
+## Hackathon Arduino 2015
+
+<img src="img/arduino.png" alt="Banner" style="width: 70%; margin-top: -1em; border: 0; box-shadow: none;">
+
+FIXME
 
 ---
 
@@ -364,7 +367,7 @@ IMMAGINE
 
 #### Per i più esperti, questo è lo schema:
 
-<img src="img/adapter_schematic.png" alt="adapter_schematic" style="height: 13em; border: 0;">
+<img src="img/adapter_schematic.png" alt="adapter_schematic" style="height: 17em; border: 0;">
 
 --
 
@@ -536,7 +539,7 @@ void loop(void)
 #### Collegate:
  - `+` a 3.3 V
  - `-` a GND
- - out a un qualunque pin dell'ESP8266 (nel codice d'esempio, GPIO2)
+ - out a un qualunque pin dell'ESP8266 (nel codice d'esempio, GPIO13)
 
 --
 
@@ -552,7 +555,7 @@ void loop(void)
 #include <DHT.h>
 #include <DHT_U.h>
 
-DHT_Unified dht(2, DHT22);
+DHT_Unified dht(13, DHT22);
 
 void setup() {
 	Serial.begin(115200); 
@@ -605,7 +608,7 @@ void loop() {
 #### Il DS18B20 utilizza la stessa interfaccia del DHT22 (OneWire), e si collega all'ESP8266 allo stesso modo:
  - Cavo rosso a 3.3 V
  - Cavo nero a GND
- - Cavo giallo ad un pin qualunque (nel codice d'esempio, GPIO16)
+ - Cavo giallo ad un pin qualunque (nel codice d'esempio, GPIO2)
 
 --
 
@@ -620,7 +623,7 @@ void loop() {
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-OneWire oneWire(16);
+OneWire oneWire(2);
 DallasTemperature sensors(&oneWire);
 
 void setup(void)
@@ -689,7 +692,7 @@ Collegando i pin come descritto nella slide precedente, il DMARD03 assumerà l'i
 #### Il buzzer va collegato in questo modo:
  - `+` a 3.3 V
  - `-` a GND
- - out a un qualunque pin dell'ESP8266 (nel codice d'esempio, GPIO12)
+ - out a un qualunque pin dell'ESP8266 (nel codice d'esempio, GPIO16)
 
 --
 
@@ -698,16 +701,18 @@ Collegando i pin come descritto nella slide precedente, il DMARD03 assumerà l'i
 ```
 #include <Ticker.h>
 
+#define BUZZER_PIN 16
+
 Ticker buzzer;
 
 void toggleBuzzer()
 {
-	digitalWrite(12, !digitalRead(12));
+	digitalWrite(BUZZER_PIN, !digitalRead(BUZZER_PIN));
 }
 
 void setup()
 {
-	pinMode(12, OUTPUT);
+	pinMode(BUZZER_PIN, OUTPUT);
   
 	buzzer.attach_ms(5, toggleBuzzer);
 }
@@ -752,11 +757,168 @@ void loop()
 
 ---
 
-## Wi-Fi
+## Connettersi ad una rete Wi-Fi
 
 --
 
-MISSING FIXME
+L'ESP8266 supporta:
+ - Open network
+ - WEP
+ - WPA/WPA2 Personal
+
+Non supporta il WPA/WPA2 Enterprise, quindi non può connettersi a **polimi-protected** o **eduroam**.
+
+--
+
+## setup()
+
+```
+#include <ESP8266WiFi.h>
+
+const char* ssid = "********"; // Set the ssid (name of the Wi-Fi network) here
+const char* password = "********"; // Set the Wi-Fi password here
+
+void setup(void)
+{
+	Serial.begin(115200);
+
+	// Connect to an existing Wi-Fi network
+	WiFi.begin(ssid, password);
+	Serial.print("Connecting");
+
+	// Wait for connection
+	while (WiFi.status() != WL_CONNECTED) {
+		delay(500);
+		Serial.print(".");
+	}
+	
+	Serial.println(" DONE!");
+}
+```
+
+--
+
+## loop()
+
+```
+void loop(void)
+{
+	Serial.println("");
+	Serial.print("Connected to ");
+	Serial.println(ssid);
+	Serial.print("IP address: ");
+	Serial.println(WiFi.localIP());
+	delay(2000);
+}
+```
+
+---
+
+## HTTP GET
+
+Una volta connessi ad una rete Wi-Fi possiamo effettuare richieste HTTP GET.
+
+Il _setup()_ è pressochè identico al precedente sketch, è stata solamente aggiunta la riga
+
+```#include <ESP8266HTTPClient.h>```
+
+--
+
+## setup()
+
+```
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+
+const char* ssid = "********"; // Set the ssid (name of the Wi-Fi network) here
+const char* password = "********"; // Set the Wi-Fi password here
+
+void setup(void)
+{
+	Serial.begin(115200);
+
+	// Connect to an existing Wi-Fi network
+	WiFi.begin(ssid, password);
+	Serial.print("Connecting");
+
+	// Wait for connection
+	while (WiFi.status() != WL_CONNECTED) {
+		delay(500);
+		Serial.print(".");
+	}
+	
+	Serial.println(" DONE!");
+}
+```
+
+--
+
+## loop() - HTTP
+
+```
+void loop() {
+	HTTPClient http;
+	int httpCode;
+	const char *url = "api.github.com";
+	const char *path = "/";
+
+	/* HTTP */
+	http.begin(url, 80, path);
+	httpCode = http.GET();
+	
+	if (httpCode) {
+		// HTTP header has been send and server response header has been handled
+		Serial.printf("[HTTP] GET... code: %d\n", httpCode); 
+		
+		if (httpCode == 200)
+			Serial.println(http.getString());
+	}
+	else
+		Serial.println("[HTTP] GET... failed, no connection or no HTTP server");
+
+	delay(2000);
+}
+```
+
+--
+
+FIXME se riesci metti la transizione "fade" qui
+
+## loop() - HTTPS
+
+```
+void loop() {
+	HTTPClient http;
+	int httpCode;
+	const char *url = "api.github.com";
+	const char *path = "/";
+
+	/* HTTPS */
+	http.begin(url, 443, path, true, "CF 05 98 89 CA FF 8E D8 5E 5C E0 C2 E4 F7 E6 C3 C7 50 DD 5C");
+	httpCode = http.GET();
+	
+	if (httpCode) {
+		// HTTP header has been send and server response header has been handled
+		Serial.printf("[HTTP] GET... code: %d\n", httpCode); 
+		
+		if (httpCode == 200)
+			Serial.println(http.getString());
+	}
+	else
+		Serial.println("[HTTP] GET... failed, no connection or no HTTP server");
+
+	delay(2000);
+}
+```
+
+--
+
+#### Come potete vedere fare una richiesta GET HTTPS è molto semplice.
+
+#### Il quinto parametro di http.begin è lo SHA-1 fingerprint del server e potete ottenerlo da un qualunque browser.
+#### Nel nostro esempio è "CF 05 98 89 CA FF 8E D8 5E 5C E0 C2 E4 F7 E6 C3 C7 50 DD 5C", lo SHA-1 fingerprint di api.github.com
+
+#### Se possibile usate sempre HTTPS al posto di HTTP.
 
 ---
 
