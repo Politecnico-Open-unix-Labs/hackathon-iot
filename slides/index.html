@@ -95,19 +95,17 @@
 
 ---
 
-# Index FIXME
+# Index
 
-- Why 3D Printing
-- What
-- Some history
-- Open Source Printing: Hardware
-- How to build one
-- Materials
-- Open Source Printing: Software
-- Model 2 Object
-- Control Software
-- Finding Models on The Internet
-- Some 3D Editors
+ - Presentazione
+ - Materiale a vostra disposizione
+ - Descrizione dei componenti
+ - Wi-Fi
+ - EDNE FIXME
+
+---
+
+FIXME PRESENTAZIONE
 
 ---
 
@@ -126,8 +124,6 @@ Il "core" del nostro sistema
 Convertitore USB-seriale
 
 <img src="img/ch340g.jpg" alt="ESP8266" style="height: 13em; border: 0;">
-
-FIXME WATERMARK
 
 --
 
@@ -202,9 +198,6 @@ Resistenze, potenziometri, pulsanti, breadboard...
 <!-- .slide: data-background="img/evil-laugh.gif" -->
 
 --
-
-## Ma io mi sono iscritto ad un hackathon Arduino...
-FIXME TESTO NERO
 
 <!-- .slide: data-background="img/crying.jpg" -->
 
@@ -895,8 +888,6 @@ void loop() {
 
 --
 
-FIXME se riesci metti la transizione "fade" qui
-
 ## loop() - HTTPS
 
 ```
@@ -934,6 +925,111 @@ void loop() {
 #### Nel nostro esempio è "CF 05 98 89 CA FF 8E D8 5E 5C E0 C2 E4 F7 E6 C3 C7 50 DD 5C", lo SHA-1 fingerprint di api.github.com
 
 #### Se possibile usate sempre HTTPS al posto di HTTP.
+
+---
+
+## HTTP POST
+
+Il codice per effettuare una richiesta HTTP POST è praticamente identico a quello per una GET, basta sostituire
+
+```httpCode = http.GET();```
+
+con
+
+```	httpCode = http.POST("post_message_here");```
+
+--
+
+## setup()
+
+```
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+
+const char* ssid = "********"; // Set the ssid (name of the Wi-Fi network) here
+const char* password = "********"; // Set the Wi-Fi password here
+
+void setup(void)
+{
+	Serial.begin(115200);
+
+	// Connect to an existing Wi-Fi network
+	WiFi.begin(ssid, password);
+	Serial.print("Connecting");
+
+	// Wait for connection
+	while (WiFi.status() != WL_CONNECTED) {
+		delay(500);
+		Serial.print(".");
+	}
+	
+	Serial.println(" DONE!");
+}
+```
+
+<!-- .slide: data-background="img/code.jpg" -->
+
+--
+
+## loop() - HTTP
+
+```
+void loop() {
+	HTTPClient http;
+	int httpCode;
+	const char *url = "api.github.com";
+	const char *path = "/";
+
+	/* HTTP */
+	http.begin(url, 80, path);
+	httpCode = http.POST("POuL=cool");
+	
+	if (httpCode) {
+		// HTTP header has been send and server response header has been handled
+		Serial.printf("[HTTP] GET... code: %d\n", httpCode); 
+		
+		if (httpCode == 200)
+			Serial.println(http.getString());
+	}
+	else
+		Serial.println("[HTTP] GET... failed, no connection or no HTTP server");
+
+	delay(2000);
+}
+```
+
+<!-- .slide: data-background="img/code.jpg" -->
+
+--
+
+## loop() - HTTPS
+
+```
+void loop() {
+	HTTPClient http;
+	int httpCode;
+	const char *url = "api.github.com";
+	const char *path = "/";
+
+	/* HTTPS */
+	http.begin(url, 443, path, true, "CF 05 98 89 CA FF 8E D8 5E 5C E0 C2 E4 F7 E6 C3 C7 50 DD 5C");
+	httpCode = http.POST("POuL=cool");
+	
+	if (httpCode) {
+		// HTTP header has been send and server response header has been handled
+		Serial.printf("[HTTP] GET... code: %d\n", httpCode); 
+		
+		if (httpCode == 200)
+			Serial.println(http.getString());
+	}
+	else
+		Serial.println("[HTTP] GET... failed, no connection or no HTTP server");
+
+	delay(2000);
+}
+```
+
+<!-- .slide: data-background="img/code.jpg" -->
 
 ---
 
