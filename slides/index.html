@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Hackathon Arduino 2015 - Politecnico Open unix Labs</title>
+    <title>Hackathon Arduino IoT 2015 - Politecnico Open unix Labs</title>
 
     <meta name="description" content="Hackathon Arduino 2015">
     <meta name="author" content="Nicola Corna">
@@ -58,11 +58,7 @@
 
 <!-- .slide: data-background="#fdfddf" -->
 
-## Hackathon Arduino 2015
-
-<img src="img/arduino.png" alt="Banner" style="width: 70%; margin-top: -1em; border: 0; box-shadow: none;">
-
-FIXME
+<img src="img/banner.png" alt="Banner" style="height: 22em; margin-top: -1em; border: 0; box-shadow: none;">
 
 ---
 
@@ -87,7 +83,15 @@ FIXME
 
 ---
 
-## [dove le hostiamo? FIXME](https://hackathon.corna.info)
+## Trovate queste slide all'indirizzo
+
+## [hackathon.corna.info](https://hackathon.corna.info)
+
+---
+
+## Calendario
+ - Venerdí 11 dicembre, 16.15-18.00, aula S.1.7 – Preparazione <!-- .element: class="fragment" -->
+ - Sabato 12 dicembre, 9.00-18.00, aula S.1.7 – Hacking Time! <!-- .element: class="fragment" -->
 
 ---
 
@@ -228,11 +232,11 @@ Inoltre Arduino è stato reso compatibile con l'ESP8266.
 --
 
 ## Cosa devo fare???
- - Scarica e installa Arduino 1.6.5 (non usare l'1.6.6!) <!-- .element: class="fragment" -->
- - Lancialo e vai in File → Impostazione → Additional Boards Manager URLs <!-- .element: class="fragment" -->
- - Aggiungi <!-- .element: class="fragment" --> nel campo a lato il seguente URL: [http://arduino.esp8266.com/stable/package_esp8266com_index.json](http://arduino.esp8266.com/stable/package_esp8266com_index.json)
- - Vai in Strumenti → Scheda → Boards Manager <!-- .element: class="fragment" -->
- - Seleziona <!-- .element: class="fragment" --> "**esp8266** by **ESP8266 Community**" e clicca su Install
+ - Scaricate e installate Arduino 1.6.5 (non usare l'1.6.6!) <!-- .element: class="fragment" -->
+ - Lanciatelo e andate in File → Impostazione → Additional Boards Manager URLs <!-- .element: class="fragment" -->
+ - Aggiungete <!-- .element: class="fragment" --> nel campo a lato il seguente URL: [http://arduino.esp8266.com/stable/package_esp8266com_index.json](http://arduino.esp8266.com/stable/package_esp8266com_index.json)
+ - Andate in Strumenti → Scheda → Boards Manager <!-- .element: class="fragment" -->
+ - Selezionate <!-- .element: class="fragment" --> "**esp8266** by **ESP8266 Community**" e cliccate su Install
  - Ora Arduino funziona sul modulo ESP8266 <!-- .element: class="fragment" -->
 
 --
@@ -262,6 +266,7 @@ Inoltre Arduino è stato reso compatibile con l'ESP8266.
 ---
 
 ## ESP8266 (ESP-12)
+Il "core" del nostro sistema
 
 <img src="img/esp8266.jpg" alt="ESP8266" style="height: 13em; border: 0;">
 
@@ -313,7 +318,7 @@ Se volete invece che all'avvio l'ESP lanci in automatico il programma, connettet
 
 #### L'ESP8266 e tutti i sensori funzionano a 3.3 V, mentre il convertitore USB-seriale funziona a 5 V.
 
-####Fortunatamente nel modulo ESP-12 è integrato un convertitore 5 V → 3.3 V, quindi possiamo collegare direttamente il VCC del programmatore con il VCC dell'ESP.
+#### Fortunatamente nel modulo ESP-12 è integrato un convertitore 5 V → 3.3 V, quindi possiamo collegare direttamente il VCC del programmatore con il VCC dell'ESP.
 
 ### **Non collegate il VCC (5 V) del convertitore a nient'altro!!!**
 
@@ -331,6 +336,10 @@ Se volete invece che all'avvio l'ESP lanci in automatico il programma, connettet
 
 --
 
+<!-- .slide: data-background="img/explosion.gif" -->
+
+--
+
 #### A questo punto l'ESP è connesso al PC, andiamo ora nell'IDE Arduino e, nella tab _Strumenti_ selezioniamo i seguenti parametri:
  - Scheda: "Generic ESP8266 Module"
  - Flash Mode: "QIO"
@@ -340,7 +349,7 @@ Se volete invece che all'avvio l'ESP lanci in automatico il programma, connettet
  - Flash Size: "4M (1M SPIFFS)"
  - Reset Method: "ck"
  - Upload Speed: "115200"
- - Porta: dipende dal sistema operativo, generalmente "COM1" su Windows e "/dev/ttyUSB0" su Linux
+ - Porta: dipende dal sistema operativo, generalmente "COM0" su Windows e "/dev/ttyUSB0" su Linux
 
 Ora basta cliccare il pulsante "Carica" per compilare lo sketch e caricarlo sull'ESP.
 
@@ -373,6 +382,7 @@ IMMAGINE CONNESSIONI
 ---
 
 ## BMP180 e HMC5883L
+Pressione atmosferica + campo magnetico
 
 <img src="img/gy652.jpg" alt="GY652" style="height: 13em; border: 0;">
 
@@ -520,6 +530,7 @@ void loop(void)
 ---
 
 ## DHT22
+Umidità e temperatura
 
 <img src="img/dht22.jpg" alt="DHT22" style="height: 13em; border: 0;">
 
@@ -589,6 +600,7 @@ void loop() {
 ---
 
 ## DS18B20
+Temperatura
 
 <img src="img/ds18b20.jpg" alt="DS18B20" style="height: 13em; border: 0;">
 
@@ -648,6 +660,7 @@ void loop(void)
 ---
 
 ## DMARD03
+Accelerazione
 
 <img src="img/dmard03.jpg" alt="DMARD03" style="height: 13em; border: 0;">
 
@@ -673,6 +686,7 @@ Collegando i pin come descritto nella slide precedente, il DMARD03 assumerà l'i
 ---
 
 ## Buzzer
+Per generare suoni (fastidiosi)
 
 <img src="img/buzzer.jpg" alt="buzzer" style="height: 13em; border: 0;">
 
@@ -718,7 +732,9 @@ void loop()
 
 # WARNING!
 
-#### La libreria *Tone* **non** funziona con ESP8266, se volete generare toni fatelo a mano con la libreria *Ticker*.
+### La libreria *Tone* **non** funziona con ESP8266, se volete generare toni fatelo a mano con la libreria *Ticker*.
+
+### Se provate a utilizzarla vedrete che non funziona nulla
 
 <!-- .slide: data-background="#B00000" -->
 
@@ -738,9 +754,9 @@ void loop()
 
 # WARNING!
 
-#### Per leggere una tensione analogica sul pin "ADC" basta usare *analogRead(A0)* (come in Arduino).
+### Per leggere una tensione analogica sul pin "ADC" basta usare *analogRead(A0)* (come in Arduino).
 
-#### L'ADC accetta però valori tra 0 V e 1 V; fate quindi in modo di non superare 1 V.
+### L'ingresso analogico accetta però valori tra 0 V e 1 V; fate quindi in modo di non superare 1 V.
 
 <!-- .slide: data-background="#B00000" -->
 
@@ -918,6 +934,18 @@ void loop() {
 #### Nel nostro esempio è "CF 05 98 89 CA FF 8E D8 5E 5C E0 C2 E4 F7 E6 C3 C7 50 DD 5C", lo SHA-1 fingerprint di api.github.com
 
 #### Se possibile usate sempre HTTPS al posto di HTTP.
+
+---
+
+# Domande?
+
+<!-- .slide: data-background="" -->
+
+---
+
+<img src="img/coffee.gif" alt="Coffee" style="width: 70%; border: 0; margin-top: -2em; box-shadow: none;">
+
+<!-- .slide: data-background="#fff" -->
 
 ---
 
