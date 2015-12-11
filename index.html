@@ -120,7 +120,7 @@ Per edne: quando hai fatto la tua parte aggiorna l'indice e aggiungi gli href al
 
 # Internet of Things
 
-L'Internet of Things (IoT) è una rete di dispositivi (spesso _embedded_ e connessi a sensori) che elaborano e scambiano dati.
+L'Internet of Things (IoT) è una rete di dispositivi connessi a Internet (spesso _embedded_ e connessi a sensori) che elaborano e scambiano dati.
 
 --
 
@@ -128,7 +128,7 @@ L'Internet of Things (IoT) è una rete di dispositivi (spesso _embedded_ e conne
 
 --
 
-## Cos'è questo hackathon?
+### Cos'è questo hackathon?
  Un'occasione per...
  - entrare nel mondo dell'IoT <!-- .element: class="fragment" -->
  - affinare la propria conoscenza di Arduino <!-- .element: class="fragment" -->
@@ -137,7 +137,7 @@ L'Internet of Things (IoT) è una rete di dispositivi (spesso _embedded_ e conne
 
 --
 
-## Cosa *non* è questo hackathon?
+### Cosa *non* è questo hackathon?
  - un corso <!-- .element: class="fragment" -->
 
 --
@@ -155,13 +155,13 @@ L'Internet of Things (IoT) è una rete di dispositivi (spesso _embedded_ e conne
 
 #### Q: _"Non so nulla di C/C++/Arduino/elettrotecnica, posso fare comunque questo hackathon?"_
 
-A: Ehm... Si, ma considera che non ti verrà fornito molto aiuto. L'hackathon è una sfida con sè stessi, non è un corso. <!-- .element: class="fragment" -->
+A: Ehm... Sì, ma considera che non ti verrà fornito molto aiuto. L'hackathon è una sfida con se stessi, non è un corso. <!-- .element: class="fragment" -->
 
 --
 
 #### Q: _"Il materiale lo fornite voi?"_
 
-A: Si, vi forniamo tutto il materiale di cui avete bisogno. <!-- .element: class="fragment" -->
+A: Sì, vi forniamo tutto il materiale di cui avete bisogno. <!-- .element: class="fragment" -->
 
 --
 
@@ -185,13 +185,13 @@ A: Sono i nomi di alcuni pin dei vari moduli. Guarda bene il modulo, sono scritt
 
 #### Q: _"Nella presentazione non c'è nemmeno uno schema delle connessioni delle breadboard... Perchè?"_
 
-A: Perchè vogliamo che impariate a leggere la documentazione e a cercare le informazioni su internet e sui dispositivi che vi diamo. <!-- .element: class="fragment" -->
+A: Perchè vogliamo che impariate a leggere la documentazione e a cercare le informazioni su Internet e sui dispositivi che vi diamo. <!-- .element: class="fragment" -->
 
 --
 
 #### Q: _"Non mi sono iscritto, posso venire comunque domani?"_
 
-A: Si, ma al prossimo evento iscriviti per favore. <!-- .element: class="fragment" -->
+A: Sì, ma al prossimo evento iscriviti per favore. <!-- .element: class="fragment" -->
 
 ---
 
@@ -958,7 +958,7 @@ void loop() {
 	http.begin(url, 80, path);
 	httpCode = http.GET();
 	
-	if (httpCode) {
+	if (httpCode > 0) {
 		// HTTP header has been send and server response header has been handled
 		Serial.printf("[HTTP] GET... code: %d\n", httpCode); 
 		
@@ -966,7 +966,7 @@ void loop() {
 			Serial.println(http.getString());
 	}
 	else
-		Serial.println("[HTTP] GET... failed, no connection or no HTTP server");
+		Serial.printf("[HTTP] GET... failed: error code %d", httpCode);
 
 	delay(2000);
 }
@@ -989,7 +989,7 @@ void loop() {
 	http.begin(url, 443, path, true, "CF 05 98 89 CA FF 8E D8 5E 5C E0 C2 E4 F7 E6 C3 C7 50 DD 5C");
 	httpCode = http.GET();
 	
-	if (httpCode) {
+	if (httpCode > 0) {
 		// HTTP header has been send and server response header has been handled
 		Serial.printf("[HTTP] GET... code: %d\n", httpCode); 
 		
@@ -997,7 +997,7 @@ void loop() {
 			Serial.println(http.getString());
 	}
 	else
-		Serial.println("[HTTP] GET... failed, no connection or no HTTP server");
+		Serial.printf("[HTTP] GET... failed: error code %d", httpCode);
 
 	delay(2000);
 }
@@ -1074,15 +1074,15 @@ void loop() {
 	http.begin(url, 80, path);
 	httpCode = http.POST("POuL=cool");
 	
-	if (httpCode) {
+	if (httpCode > 0) {
 		// HTTP header has been send and server response header has been handled
-		Serial.printf("[HTTP] GET... code: %d\n", httpCode); 
+		Serial.printf("[HTTP] POST... code: %d\n", httpCode); 
 		
 		if (httpCode == 200)
 			Serial.println(http.getString());
 	}
 	else
-		Serial.println("[HTTP] GET... failed, no connection or no HTTP server");
+		Serial.printf("[HTTP] POST... failed: error code %d", httpCode);
 
 	delay(2000);
 }
@@ -1105,21 +1105,34 @@ void loop() {
 	http.begin(url, 443, path, true, "CF 05 98 89 CA FF 8E D8 5E 5C E0 C2 E4 F7 E6 C3 C7 50 DD 5C");
 	httpCode = http.POST("POuL=cool");
 	
-	if (httpCode) {
+	if (httpCode > 0) {
 		// HTTP header has been send and server response header has been handled
-		Serial.printf("[HTTP] GET... code: %d\n", httpCode); 
+		Serial.printf("[HTTP] POST... code: %d\n", httpCode); 
 		
 		if (httpCode == 200)
 			Serial.println(http.getString());
 	}
 	else
-		Serial.println("[HTTP] GET... failed, no connection or no HTTP server");
+		Serial.printf("[HTTP] POST... failed: error code %d", httpCode);
 
 	delay(2000);
 }
 ```
 
 <!-- .slide: data-background="img/code.jpg" -->
+
+--
+
+Sia la funzione _http.GET()_ che la funzione _http.POST(payload)_ ritornano un codice
+- se è positivo questo rappresenta l'HTTP code ricevuto dal server
+- se è negativo identifica un errore del client, con i seguenti significati:
+   - -1: connection refused
+   - -2: send header failed
+   - -3: send payload failed
+   - -4: not connected
+   - -5: connection lost
+   - -6: no stream
+   - -7: no http server
 
 ---
 
