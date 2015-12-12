@@ -378,7 +378,7 @@ L'ESP8266 si programma con la seriale.
 Per collegarlo basta connettere
  - TX ↔ RX
  - RX ↔ TX
- - GPIO0 (ESP8266) ↔ DTS (convertitore)
+ - GPIO0 (ESP8266) ↔ DTR (convertitore)
  - REST (ESP8266) ↔ RTS (convertitore)
 
 --
@@ -413,7 +413,7 @@ Se volete invece che all'avvio l'ESP lanci in automatico il programma, connettet
 
 # WARNING!
 
-#### Anche le linee dati (RX, TX, DTS e RTS) della seriale sono a 5 V, e collegandole direttamente si rischierebbe di danneggiare l'ESP8266.
+#### Anche le linee dati (RX, TX, DTR e RTS) della seriale sono a 5 V, e collegandole direttamente si rischierebbe di danneggiare l'ESP8266.
 
 ### **Utilizzate l'adattatore di livelli logici tra l'ESP8266 e la seriale!!!**
 
@@ -464,7 +464,7 @@ Ora basta cliccare il pulsante "Carica" per compilare lo sketch e caricarlo sull
  - 3V3 a 3.3V (**NON all'uscita del convertitore USB-seriale**)
  - TX (ESP8266) ↔ 1A, 1B ↔ RX (convertitore)
  - RX (ESP8266) ↔ 2A, 2B ↔ TX (convertitore)
- - GPIO0 (ESP8266) ↔ 3A, 3B ↔ DTS (convertitore)
+ - GPIO0 (ESP8266) ↔ 3A, 3B ↔ DTR (convertitore)
  - REST (ESP8266) ↔ 4A, 4B ↔ RTS (convertitore)
 
 ---
